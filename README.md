@@ -2,9 +2,10 @@ Quantcast Measure SDK for Roku
 =================
 This implementation guide provides steps for integrating the Quantcast Measure for Roku SDK, so you can take advantage of valuable, actionable insights:
 
-Know Your Audience - Quantcast uses direct measurement and machine learning to build accurate and detailed demographic profiles.
-Compare and Compete - Gauge user loyalty by analyzing visit frequency, retention and upgrades over time.
-Attract Advertising – Attract advertisers by showcasing your most powerful data points using a trusted source.
+* **Know Your Audience** - Quantcast uses direct measurement and machine learning to build accurate and detailed demographic profiles.
+* **Compare and Compete** - Gauge user loyalty by analyzing visit frequency, retention and upgrades over time.
+* **Attract Advertising** – Attract advertisers by showcasing your most powerful data points using a trusted source. 
+
 If you have any implementation questions, please email mobilesupport@quantcast.com. We're here to help.
 
 Integrating Quantcast Measure for Roku
