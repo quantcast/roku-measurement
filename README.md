@@ -34,16 +34,18 @@ The recommended way to integrate the Quantcast SDK requires only a single line o
 	The `SegmentLabels` parameter is used to create Audience Segments.  This parameter may be INVALID or omitted. Learn more in the [Audience Labels](#audience-labels) section.
 
 2.  In your channel's main event loop, you must pass the SDK any messages that belong to it.  This can be accomplished in two ways.  The least verbose way is to pass messages to the Quantcast SDK and let the SDK tell you if the message was handled.  This loop would look similar to 
+
 	```
      WHILE TRUE 
          msg = wait(0, messagePort)
          IF NOT quantcast.HandleMsg(msg) 
             <YOUR NORMAL EVENTLOOP CODE GOES HERE>
-            ...
          END IF
      END WHILE
     ```
+
     The HandleMsg call will only check and handle messages belonging to the SDK, all other messages will be untouched.  If you would like the check the messages manually before passing them to the SDK you can do that instead with the following block of code
+
 	```
      WHILE TRUE 
          msg = wait(0, messagePort)
@@ -52,7 +54,6 @@ The recommended way to integrate the Quantcast SDK requires only a single line o
                  quantcast.HandleMsg(msg)
              END IF
              <YOUR NORMAL EVENTLOOP CODE GOES HERE>
-            ...
     ```
 
 3.  Finally, as soon as you know your channel is exiting you must end the Quantcast session.  It is best to do this as soon as possible as this call tries to make a final data push to the server.  
