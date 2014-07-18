@@ -23,7 +23,7 @@ The recommended way to integrate the Quantcast SDK requires only a single line o
 
 	```
 	quantcast = getQuantcastInstance()
-	quantcast.StartQuantcast("<_Insert your API Key Here_>", messagePort, userIdentifier, SegmentLabels)
+	quantcast.StartQuantcast("<Insert your API Key Here>", messagePort, userIdentifier, SegmentLabels)
     ```
 
 	Replace "<_Insert your API Key Here_>" with your Quantcast API Key. The API Key can be found in the file “api-key.txt” in your Quantcast SDK folder. All your API keys can also be found on your Quantcast dashboard: [https://www.quantcast.com/user/resources?listtype=apps] (https://www.quantcast.com/user/resources?listtype=apps). For more information about how and when to use the API Key, read [Understanding the API Key] (#optional-understanding-the-api-key).
@@ -66,6 +66,10 @@ The recommended way to integrate the Quantcast SDK requires only a single line o
 #### (optional) Understanding the API Key ####
 The API key is used as the basic reporting entity for Quantcast Measure. The same API Key can be used across multiple apps (i.e. AppName Free / AppName Paid) and/or app platforms (i.e. iOS / Android). For all apps under each unique API Key, Quantcast will report the aggregate audience among them all, and also identify/report on the individual app versions.
 
+### Compile and Test ###
+
+You’re now ready to test your integration.  Build and run your project. Quantcast Measure will record activities and events from your Roku, as long as you quit your app properly (as opposed to killing the debug process while the app is running).  After finishing an app session, you will see your session recorded in your [Quantcast Measure dashboard](https://www.quantcast.com/) the following day.  Questions?  Please email us at mobilesupport@quantcast.com.
+
 Congratulations! Now that you’ve completed basic integration, explore how you can enable powerful features to understand your audience and track usage of your app. 
 
 *	Read about [User Privacy](#user-privacy) disclosure and options.
@@ -90,7 +94,7 @@ Note: when a user opts out of Quantcast Measure, the SDK immediately stops trans
 ### Optional Code Integrations ###
 
 #### Audience Labels ####
-Use labels to create Audience Segments, or groups of users that share a common property or attribute.  For instance, you can create an audience segment of users who purchase something in your channel.  For each audience segment you create, Quantcast will track membership of the segment over time, and generate an audience report that includes their demographics.  If you have implemented the same audience segments on your website(s), you will see a combined view of your web and channel audiences for each audience segment. Learn more about how to use audience segments, including how to create segment hierarchies using the dot notation, here: [https://www.quantcast.com/help/showcase-your-audience-segments/] (https://www.quantcast.com/help/showcase-your-audience-segments/). 
+Use labels to create Audience Segments, or groups of users that share a common property or attribute.  For instance, you can create an audience segment of users who purchase something in your channel.  For each audience segment you create, Quantcast will track membership of the segment over time, and generate an audience report that includes their demographics.  If you have implemented the same audience segments on your website(s), you will see a combined view of your web and channel audiences for each audience segment. Learn more about how to use audience segments, including how to create segment hierarchies using the dot notation, here: [https://www.quantcast.com/help/showcase-your-audience-segments/](https://www.quantcast.com/help/showcase-your-audience-segments/). 
 
 Labels can be set on most methods of the SDK and can be either a single string or an array of Strings.   Labels are always the last parameter of a function and always optional.  For example when you start the Channel you can pass any know labels in the start function
 
@@ -129,7 +133,7 @@ quantcast.RecordUserIdentifier(userIdentifierStr)
 ```
 The user identifier is passed in the `userIdentifierStr` argument. 
 
-Note that in all cases, the Quantcast iOS SDK will immediately 1-way hash the passed channel user identifier, and return the hashed value for your reference. You do not need to take any action with the hashed value.
+Note that in all cases, the Quantcast Roku SDK will immediately 1-way hash the passed channel user identifier, and return the hashed value for your reference. You do not need to take any action with the hashed value.
 
 ## License ##
 This Quantcast Measurement SDK is Copyright 2012-2014 Quantcast Corp. This SDK is licensed under the Quantcast Mobile App Measurement Terms of Service, found at [the Quantcast website here](https://www.quantcast.com/learning-center/quantcast-terms/mobile-app-measurement-tos "Quantcast's Measurement SDK Terms of Service") (the "License"). You may not use this SDK unless (1) you sign up for an account at [Quantcast.com](https://www.quantcast.com "Quantcast.com") and click your agreement to the License and (2) are in compliance with the License. See the License for the specific language governing permissions and limitations under the License. Unauthorized use of this file constitutes copyright infringement and violation of law.
