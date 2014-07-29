@@ -95,7 +95,7 @@ FUNCTION qcmsrmt_SendEvents(jsonBody AS STRING) AS BOOLEAN
     
     request = CreateObject("roUrlTransfer")
     request.SetUrl(EventURLStr)
-
+    request.AddHeader("Content-Type","application/json")
     network = getQuantcastInstance().Networking
 
     IF network <> INVALID
