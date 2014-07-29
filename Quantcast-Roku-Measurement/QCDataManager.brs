@@ -27,6 +27,7 @@ SUB qcmsrmt_PostEvent(event, policy, sendImmediately=TRUE AS BOOLEAN)
         fullData = { 
             uplid : qcmsrmt_CreateUUID()
             qcv   : "ROKU_" + GetGlobalAA()["QuantcastSDKVersion"]
+            apikey: getQuantcastInstance().ApiKey
             events: m.Events
         }
         'lets create the full Json

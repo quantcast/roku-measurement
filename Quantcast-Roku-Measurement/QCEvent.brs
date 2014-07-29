@@ -17,7 +17,7 @@ FUNCTION qcmsrmt_LaunchEvent(sessionID as String, userhash, appInstallId AS Stri
         did     : deviceInfo.GetDeviceUniqueId()
         event   : "load"
         nsr     : "launch"
-        apiKey  : apiKey
+        apikey  : apiKey
         media   : "app"
         ct      : "wifi" 
         aname   : manifest["title"]

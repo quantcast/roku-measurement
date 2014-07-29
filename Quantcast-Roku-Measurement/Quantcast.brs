@@ -25,7 +25,7 @@ Function getQuantcastInstance()
         }
         ' singleton
         m.Instance = this
-        GetGlobalAA().AddReplace("QuantcastSDKVersion", "1_0_0")
+        GetGlobalAA().AddReplace("QuantcastSDKVersion", “1_0_1”)
     END IF
     
     return this
