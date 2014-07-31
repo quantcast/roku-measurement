@@ -12,7 +12,7 @@ FUNCTION qcmsrmt_LaunchEvent(sessionID as String, userhash, appInstallId AS Stri
 
     event = {
         sid     : sessionID
-        et      : UTCDateHour
+        et      : UTCDateHour.TOSTR()
         aid     : appInstallId
         did     : deviceInfo.GetDeviceUniqueId()
         event   : "load"
@@ -28,7 +28,7 @@ FUNCTION qcmsrmt_LaunchEvent(sessionID as String, userhash, appInstallId AS Stri
         dos     : "Roku OS"
         dosv    : deviceInfo.GetVersion()
         dm      : "Roku" 
-        tzo     : timeZoneOffset
+        tzo     : STR(timeZoneOffset).Trim()
     }
     
     'check user hash
@@ -66,7 +66,7 @@ Function qcmsrmt_EndEvent(sessionID as String, appInstallId AS String, labels) a
     
     event = {
         sid     : sessionID
-        et      : nowDate.AsSeconds()
+        et      : nowDate.AsSeconds().tostr()
         aid     : appInstallId
         event   : "finished"
     }
@@ -79,7 +79,7 @@ Function qcmsrmt_LogEventEvent(name as String, sessionID as String, appInstallId
     
     event = {
         sid     : sessionID
-        et      : nowDate.AsSeconds()
+        et      : nowDate.AsSeconds().tostr()
         aid     : appInstallId
         event   : "appevent"
         appevent: name
@@ -126,6 +126,7 @@ FUNCTION qcmsrmt_IsVersionSupported(version AS DOUBLE, deviceInfo AS OBJECT) AS 
     deviceVersion = deviceInfo.GetVersion().Mid(2, 4).ToFloat()
     RETURN deviceVersion >= version
 END FUNCTION
+
 
 
 
