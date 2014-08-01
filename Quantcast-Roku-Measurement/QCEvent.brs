@@ -8,7 +8,7 @@ FUNCTION qcmsrmt_LaunchEvent(sessionID as String, userhash, appInstallId AS Stri
     UTCDateHour = nowDate.AsSeconds()
     nowDate.toLocalTime()
     localDateHour = nowDate.AsSeconds()
-    timeZoneOffset = (UTCDateHour - localDateHour) / 60
+    timeZoneOffset = (localDateHour - UTCDateHour) / 60
 
     event = {
         sid     : sessionID
