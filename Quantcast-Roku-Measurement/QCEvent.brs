@@ -5,14 +5,14 @@ FUNCTION qcmsrmt_LaunchEvent(sessionID as String, userhash, appInstallId AS Stri
     deviceInfo = CreateObject("roDeviceInfo")
     'time zone offset calcualtion
     nowDate = CreateObject("roDateTime")
-    UTCDateHour = nowDate.AsSeconds()
+    UTCDateSeconds = nowDate.AsSeconds()
     nowDate.toLocalTime()
-    localDateHour = nowDate.AsSeconds()
-    timeZoneOffset = (localDateHour - UTCDateHour) / 60
+    localDateSeconds = nowDate.AsSeconds()
+    timeZoneOffset = (localDateSeconds - UTCDateSeconds) / 60
 
     event = {
         sid     : sessionID
-        et      : UTCDateHour.TOSTR()
+        et      : UTCDateSeconds.TOSTR()
         aid     : appInstallId
         did     : deviceInfo.GetDeviceUniqueId()
         event   : "load"
