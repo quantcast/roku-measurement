@@ -18,10 +18,12 @@ There are two ways to get the SDK. You can download it directly from the Quantca
 ### SDK Integration ###
 
 The simplest way to integrate the Quantcast SDK requires only a single startup call.  This call synchronously handles the SDK startup process and should finish in less than half a second.  If you would like to start the SDK in parallel with other application events please see [SDK Integration Within Main Runloop](#sdk-integration-within-main-runloop).
+    
     ```
     quantcast = getQuantcastInstance()
     quantcast.QuickStartQuantcast("<Insert your API Key Here>", messagePort, userIdentifier, SegmentLabels)
     ```
+    
     Replace "<_Insert your API Key Here_>" with your Quantcast API Key. The API Key can be found in the file “api-key.txt” in your Quantcast SDK folder. All your API keys can also be found on your Quantcast dashboard: [https://www.quantcast.com/user/resources?listtype=apps](https://www.quantcast.com/user/resources?listtype=apps). For more information about how and when to use the API Key, read [Understanding the API Key](#optional-understanding-the-api-key).
 
     The `messagePort` variable is of type roMessagePort and should be the main message queue that is being checked in the channel's event loop.
