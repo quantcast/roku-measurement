@@ -17,50 +17,18 @@ There are two ways to get the SDK. You can download it directly from the Quantca
 
 ### SDK Integration ###
 
-The recommended way to integrate the Quantcast SDK requires only a single line of code: 
-
-1.	In your channel's Main Sub, as soon as possible in the code start up the Quantcast by calling:
-
-	```
-	quantcast = getQuantcastInstance()
-	quantcast.StartQuantcast("<Insert your API Key Here>", messagePort, userIdentifier, SegmentLabels)
+The simplest way to integrate the Quantcast SDK requires only a single startup call.  This call synchronously handles the SDK startup process and should finish in less than half a second.  If you would like to start the SDK in parallel with other application events please see [SDK Integration Within Main Runloop](#sdk-integration-within-main-runloop).
     ```
-
-	Replace "<_Insert your API Key Here_>" with your Quantcast API Key. The API Key can be found in the file “api-key.txt” in your Quantcast SDK folder. All your API keys can also be found on your Quantcast dashboard: [https://www.quantcast.com/user/resources?listtype=apps] (https://www.quantcast.com/user/resources?listtype=apps). For more information about how and when to use the API Key, read [Understanding the API Key] (#optional-understanding-the-api-key).
-
-    The messagePort variable is of type roMessagePort and should be the main message queue that is being checked in the channel's event loop.
-
-	The `userIdentifier` is an optional parameter that accepts a string that uniquely identifies an individual user, such as an account login. Passing this information allows Quantcast to provide reports on your combined audience across all your properties: online, mobile web and mobile app. Please see the [Combined Web/App Audiences](#combined-webapp-audiences) section for more information.
-
-	The `SegmentLabels` parameter is used to create Audience Segments.  This parameter may be INVALID or omitted. Learn more in the [Audience Labels](#audience-labels) section.
-
-2.  In your channel's main event loop, you must pass the SDK any messages that belong to it.  This can be accomplished in two ways.  The least verbose way is to pass messages to the Quantcast SDK and let the SDK tell you if the message was handled.  This loop would look similar to 
-
-	```
-     WHILE TRUE 
-         msg = wait(0, messagePort)
-         IF NOT quantcast.HandleMsg(msg) 
-            <YOUR NORMAL EVENTLOOP CODE GOES HERE>
-         END IF
-     END WHILE
+    quantcast = getQuantcastInstance()
+    quantcast.QuickStartQuantcast("<Insert your API Key Here>", messagePort, userIdentifier, SegmentLabels)
     ```
+    Replace "<_Insert your API Key Here_>" with your Quantcast API Key. The API Key can be found in the file “api-key.txt” in your Quantcast SDK folder. All your API keys can also be found on your Quantcast dashboard: [https://www.quantcast.com/user/resources?listtype=apps](https://www.quantcast.com/user/resources?listtype=apps). For more information about how and when to use the API Key, read [Understanding the API Key](#optional-understanding-the-api-key).
 
-    The HandleMsg call will only check and handle messages belonging to the SDK, all other messages will be untouched.  If you would like the check the messages manually before passing them to the SDK you can do that instead with the following block of code
+    The `messagePort` variable is of type roMessagePort and should be the main message queue that is being checked in the channel's event loop.
 
-	```
-     WHILE TRUE 
-         msg = wait(0, messagePort)
-         IF type(msg) = "roUrlEvent"
-             IF quantcast.IsQuantcastMessage(msg.GetSourceIdentity())
-                 quantcast.HandleMsg(msg)
-             END IF
-             <YOUR NORMAL EVENTLOOP CODE GOES HERE>
-    ```
+    The `userIdentifier` is an optional parameter that accepts a string that uniquely identifies an individual user, such as an account login. Passing this information allows Quantcast to provide reports on your combined audience across all your properties: online, mobile web and mobile app. Please see the [Combined Web/App Audiences](#combined-webapp-audiences) section for more information.
 
-3.  Finally, as soon as you know your channel is exiting you must end the Quantcast session.  It is best to do this as soon as possible as this call tries to make a final data push to the server.  
-	```
-	quantcast.EndQuantcast()
-    ```
+    The `SegmentLabels` parameter is used to create Audience Segments.  This parameter may be INVALID or omitted. Learn more in the [Audience Labels](#audience-labels) section.
 
 
 #### (optional) Understanding the API Key ####
@@ -73,9 +41,9 @@ You’re now ready to test your integration.  Build and run your project. Quantc
 Congratulations! Now that you’ve completed basic integration, explore how you can enable powerful features to understand your audience and track usage of your app. 
 
 *	Read about [User Privacy](#user-privacy) disclosure and options.
+*   Learn about event tracking, which can be implemented by calling [LogEvent](#tracking-channel-events)
 *	Learn about Audience Segments, which you implement via [Labels](#audience-labels).
 *	If you have a web or mobile property, get a combined view of your [mobile app and web audiences](#combined-webapp-audiences).
-*	Read about all the additional ways you can use the SDK, including [Geo Location](#geo-location-measurement) and [Digital Magazine](#digital-magazines-and-periodicals) measurement.
 
 ### User Privacy ###
 
@@ -93,6 +61,52 @@ Note: when a user opts out of Quantcast Measure, the SDK immediately stops trans
 
 ### Optional Code Integrations ###
 
+### SDK Integration Within Main Runloop ###
+You might want to manually handle the SDK startup process in parallel with other task your application might be doing.  These steps are much more complicated and should only be used by developers with a deep understanding of roMessagePorts and the Roku's lifecycle.  This should not be used with the `QuickStartQuantcast` call.
+
+1.  In your channel's Main Sub, as soon as possible in the code start up the Quantcast by calling:
+
+    ```
+    quantcast = getQuantcastInstance()
+    quantcast.StartQuantcast("<Insert your API Key Here>", messagePort, userIdentifier, SegmentLabels)
+    ```
+
+    Replace "<_Insert your API Key Here_>" with your Quantcast API Key. The API Key can be found in the file “api-key.txt” in your Quantcast SDK folder. All your API keys can also be found on your Quantcast dashboard: [https://www.quantcast.com/user/resources?listtype=apps](https://www.quantcast.com/user/resources?listtype=apps). For more information about how and when to use the API Key, read [Understanding the API Key](#optional-understanding-the-api-key).
+
+    The `messagePort` variable is of type roMessagePort and should be the main message queue that is being checked in the channel's event loop.
+
+    The `userIdentifier` is an optional parameter that accepts a string that uniquely identifies an individual user, such as an account login. Passing this information allows Quantcast to provide reports on your combined audience across all your properties: online, mobile web and mobile app. Please see the [Combined Web/App Audiences](#combined-webapp-audiences) section for more information.
+
+    The `SegmentLabels` parameter is used to create Audience Segments.  This parameter may be INVALID or omitted. Learn more in the [Audience Labels](#audience-labels) section.
+
+2.  In your channel's main event loop, usually found in the main screen object or Main, you must pass the SDK any messages that belong to it.  This can be accomplished in two ways.  The least verbose way is to pass messages to the Quantcast SDK and let the SDK tell you if the message was handled.  This loop would look similar to 
+
+    ```
+     WHILE TRUE 
+         msg = wait(0, messagePort)
+         IF NOT quantcast.HandleMsg(msg) 
+            <YOUR NORMAL EVENTLOOP CODE GOES HERE>
+         END IF
+     END WHILE
+    ```
+
+    The HandleMsg call will only check and handle messages belonging to the SDK, all other messages will be untouched.  If you would like the check the messages manually before passing them to the SDK you can do that instead with the following block of code
+
+    ```
+     WHILE TRUE 
+         msg = wait(0, messagePort)
+         IF type(msg) = "roUrlEvent"
+             IF quantcast.IsQuantcastMessage(msg.GetSourceIdentity())
+                 quantcast.HandleMsg(msg)
+             END IF
+             <YOUR NORMAL EVENTLOOP CODE GOES HERE>
+    ```
+Please note that you should not be making a completely new "WHILE TRUE" loop just for Quantcast.   The Quantcast calls should be added to the existing runloop.
+
+3.  Finally, after the main run loop has ended, you should call the EndQuantcast call.  It is best to do this as soon as possible as this call tries to make a final data push to the server.  It is OK if this is not called as will be in the case where the user exits via the Home button. 
+    ```
+    quantcast.EndQuantcast()
+    ```
 #### Audience Labels ####
 Use labels to create Audience Segments, or groups of users that share a common property or attribute.  For instance, you can create an audience segment of users who purchase something in your channel.  For each audience segment you create, Quantcast will track membership of the segment over time, and generate an audience report that includes their demographics.  If you have implemented the same audience segments on your website(s), you will see a combined view of your web and channel audiences for each audience segment. Learn more about how to use audience segments, including how to create segment hierarchies using the dot notation, here: [https://www.quantcast.com/help/showcase-your-audience-segments/](https://www.quantcast.com/help/showcase-your-audience-segments/). 
 
@@ -134,6 +148,13 @@ quantcast.RecordUserIdentifier(userIdentifierStr)
 The user identifier is passed in the `userIdentifierStr` argument. 
 
 Note that in all cases, the Quantcast Roku SDK will immediately 1-way hash the passed channel user identifier, and return the hashed value for your reference. You do not need to take any action with the hashed value.
+
+### Trouble Shooting ###
+
+**Little or No App Traffic Showing Up In App's Profile On Quantcast.com**
+Quantcast updates its website with your app's latest audience measurement data daily. If even after 1 day no data is showing up in your app's profile on quantcast.com, please check the following:
+* The `messagePort` passed to startQuantcast must be the exact messageport object that you call wait(0,messageport) and HandleMsg.
+* Be sure that the runloop calling HandleMsg is run at least a few times.  Some application can have mutiple runloops in different screens so it is possible the runloop never has a chance to run.  Quantcast should be added to the runloop that handles the main screen.
 
 ## License ##
 This Quantcast Measurement SDK is Copyright 2012-2014 Quantcast Corp. This SDK is licensed under the Quantcast Mobile App Measurement Terms of Service, found at [the Quantcast website here](https://www.quantcast.com/learning-center/quantcast-terms/mobile-app-measurement-tos "Quantcast's Measurement SDK Terms of Service") (the "License"). You may not use this SDK unless (1) you sign up for an account at [Quantcast.com](https://www.quantcast.com "Quantcast.com") and click your agreement to the License and (2) are in compliance with the License. See the License for the specific language governing permissions and limitations under the License. Unauthorized use of this file constitutes copyright infringement and violation of law.

@@ -1,5 +1,5 @@
 Function getQuantcastInstance()
-    this = m.Instance
+    this = m.qcmsrmt_Instance
     IF this = INVALID
         this = {
         'member variables
@@ -8,10 +8,12 @@ Function getQuantcastInstance()
             appInstallID    : qcmsrmt_GetAppInstallId()
             hashedUserId    : INVALID
             ApiKey          : ""
+            Policy          : INVALID
             Networking      : INVALID
             DataManager     : qcmsrmt_DataManagerInit()            
             
         'Functions
+            QuickStartQuantcast  : qcmsrmt_QuickStartQuantcast
             StartQuantcast       : qcmsrmt_StartQuantcast
             EndQuantcast         : qcmsrmt_EndQuantcast
             LogEvent             : qcmsrmt_LogEvent
@@ -21,15 +23,42 @@ Function getQuantcastInstance()
             IsOptedOut           : qcmsrmt_IsOptedOut
             SetOptOut            : qcmsrmt_SetOptOut
             GetSessionStatus     : qcmsrmt_SessionStatus
+            SetMessagePort       : qcmsrmt_SetMessagePort
          
         }
+        
         ' singleton
-        m.Instance = this
-        GetGlobalAA().AddReplace("QuantcastSDKVersion", "1_0_1")
+        m.qcmsrmt_Instance = this
+        GetGlobalAA().AddReplace("QuantcastSDKVersion", "1_0_2")
     END IF
     
     return this
     
+END FUNCTION
+
+'Synchonously starts the Quantcast Session.  This is a convienance method for those applications that do not want to manually query run loop messages for Quantcast messages
+' This should be done as soon as possible during application startup.  This should be outside any run loop.  It returns the one way hash value of the userId if provided
+' This call should not be used in conjunction with StartQuantcast or HandleMsg calls.
+' apiKey - The Quantcast API key this app should be reported under. Obtain this key from the Quantcast website
+' userIdOrBlank - an optional user identifier string that is meanigful to the app publisher. This is usually a user login name 
+'                 or anything that identifies the user (different from a device id), but there is no requirement on format of 
+'                 this other than that it is a meaningful user identifier to you. Quantcast will immediately one-way hash this value, 
+'                 thus not recording it in its raw form. You should pass nothing or blank string to indicate that there is no user 
+'                 identifier available, either at the start of the session or at all.
+' labels   - An optional String or Array object containing one or more String objects, each of which are a distinct label to be applied to this event. 
+'            A label is any arbitrary string that you want to be ascociated with this event, and will create a second dimension in 
+'            Quantcast Measurement reporting. Nominally, this is a "user class" indicator. For example, you might use one of two labels 
+'            in your app: one for user who ave not purchased an app upgrade, and one for users who have purchased an upgrade.
+
+Function qcmsrmt_QuickStartQuantcast(apiKey AS STRING, userIdOrBlank="" AS STRING, labels=INVALID) AS OBJECT
+    qcport = CreateObject("roMessagePort")
+    
+    userhash = m.StartQuantcast(apiKey, qcport, userIdOrBlank, labels)
+    
+    msg = wait(1000, qcport)
+    m.HandleMsg(msg)
+    
+    return userhash
 END FUNCTION
 
 'Starts the Quantcast Session.   This should be done as soon as possible during application startup.  This
@@ -164,6 +193,10 @@ FUNCTION qcmsrmt_CheckMessage(sourceIdentity AS INTEGER) AS BOOLEAN
     IF NOT m.sessionActive OR qcmsrmt_IsOptedOut() THEN RETURN FALSE
     RETURN m.Networking.isQCMessage(sourceIdentity)
 END FUNCTION
+
+SUB qcmsrmt_SetMessagePort(port AS OBJECT)
+    m.Networking.setMessagePort(port)
+END SUB
 
 ' Checks the opt out preference of the user.   If a User is Opted out, the Quantcast SDK will not collect any information pertaining to the device.
 FUNCTION qcmsrmt_IsOptedOut() As BOOLEAN

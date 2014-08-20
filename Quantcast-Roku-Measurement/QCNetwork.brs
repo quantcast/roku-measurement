@@ -9,6 +9,7 @@ FUNCTION QCNetworkingInit(messagePort AS OBJECT)
         StartRequest  : qcmsrmt_StartRequest
         HandleRequest : qcmsrmt_NetworkHandleMessage
         isQCMessage   : qcmsrmt_isQCMessage
+        setMessagePort: qcmsrmt_setNetworkMessagePort
         
     }
     return this
@@ -59,3 +60,10 @@ FUNCTION qcmsrmt_isQCMessage(sourceIdentity AS INTEGER) AS BOOLEAN
     return m.PendingRequests[sourceIdentity.toStr()] <> INVALID
 END FUNCTION
 
+SUB qcmsrmt_setNetworkMessagePort(port AS OBJECT)
+    IF NOT m.PendingRequests.IsEmpty()
+        ? "WARNING!: Quantcast is still expecting a message on the previous port.  Be sure all messages are collected before switching ports."
+    END IF
+    
+    m.MessagePort = port
+END SUB
