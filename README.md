@@ -23,14 +23,14 @@ The simplest way to integrate the Quantcast SDK requires only a single startup c
     quantcast = getQuantcastInstance()
     quantcast.QuickStartQuantcast("<Insert your API Key Here>", messagePort, userIdentifier, SegmentLabels)
     ```
-    
-    Replace "<_Insert your API Key Here_>" with your Quantcast API Key. The API Key can be found in the file “api-key.txt” in your Quantcast SDK folder. All your API keys can also be found on your Quantcast dashboard: [https://www.quantcast.com/user/resources?listtype=apps](https://www.quantcast.com/user/resources?listtype=apps). For more information about how and when to use the API Key, read [Understanding the API Key](#optional-understanding-the-api-key).
 
-    The `messagePort` variable is of type roMessagePort and should be the main message queue that is being checked in the channel's event loop.
+Replace "<_Insert your API Key Here_>" with your Quantcast API Key. The API Key can be found in the file “api-key.txt” in your Quantcast SDK folder. All your API keys can also be found on your Quantcast dashboard: [https://www.quantcast.com/user/resources?listtype=apps](https://www.quantcast.com/user/resources?listtype=apps). For more information about how and when to use the API Key, read [Understanding the API Key](#optional-understanding-the-api-key).
 
-    The `userIdentifier` is an optional parameter that accepts a string that uniquely identifies an individual user, such as an account login. Passing this information allows Quantcast to provide reports on your combined audience across all your properties: online, mobile web and mobile app. Please see the [Combined Web/App Audiences](#combined-webapp-audiences) section for more information.
+The `messagePort` variable is of type roMessagePort and should be the main message queue that is being checked in the channel's event loop.
 
-    The `SegmentLabels` parameter is used to create Audience Segments.  This parameter may be INVALID or omitted. Learn more in the [Audience Labels](#audience-labels) section.
+The `userIdentifier` is an optional parameter that accepts a string that uniquely identifies an individual user, such as an account login. Passing this information allows Quantcast to provide reports on your combined audience across all your properties: online, mobile web and mobile app. Please see the [Combined Web/App Audiences](#combined-webapp-audiences) section for more information.
+
+The `SegmentLabels` parameter is used to create Audience Segments.  This parameter may be INVALID or omitted. Learn more in the [Audience Labels](#audience-labels) section.
 
 
 #### (optional) Understanding the API Key ####
