@@ -19,16 +19,16 @@ There are two ways to get the SDK. You can download it directly from the Quantca
 
 The simplest way to integrate the Quantcast SDK requires only a single startup call.  This call synchronously handles the SDK startup process and should finish in less than half a second.  If you would like to start the SDK in parallel with other application events please see [SDK Integration Within Main Runloop](#sdk-integration-within-main-runloop).
     
-    ```
-    quantcast = getQuantcastInstance()
-    quantcast.QuickStartQuantcast("<Insert your API Key Here>", messagePort, userIdentifier, SegmentLabels)
-    ```
+   ```
+   quantcast = getQuantcastInstance()
+   quantcast.QuickStartQuantcast("<Insert your API Key Here>", messagePort, userIdentifier, SegmentLabels)
+   ```
 
 Replace "<_Insert your API Key Here_>" with your Quantcast API Key. The API Key can be found in the file “api-key.txt” in your Quantcast SDK folder. All your API keys can also be found on your Quantcast dashboard: [https://www.quantcast.com/user/resources?listtype=apps](https://www.quantcast.com/user/resources?listtype=apps). For more information about how and when to use the API Key, read [Understanding the API Key](#optional-understanding-the-api-key).
 
 The `messagePort` variable is of type roMessagePort and should be the main message queue that is being checked in the channel's event loop.
 
-The `userIdentifier` is an optional parameter that accepts a string that uniquely identifies an individual user, such as an account login. Passing this information allows Quantcast to provide reports on your combined audience across all your properties: online, mobile web and mobile app. Please see the [Combined Web/App Audiences](#combined-webapp-audiences) section for more information.
+The `userIdentifier` is an optional parameter that accepts a string that uniquely identifies an individual user, such as an account login. Passing this information allows Quantcast to provide reports on your combined audience across all your properties: online, mobile web and mobile app. Please see the [Combined Web/App Audiences](#combined-webapp-audiences) section for more information. This parameter may be INVALID or omitted. 
 
 The `SegmentLabels` parameter is used to create Audience Segments.  This parameter may be INVALID or omitted. Learn more in the [Audience Labels](#audience-labels) section.
 
@@ -110,7 +110,7 @@ Please note that you should not be making a completely new "WHILE TRUE" loop jus
     quantcast.EndQuantcast()
     ```
 #### Audience Labels ####
-Use labels to create Audience Segments, or groups of users that share a common property or attribute.  For instance, you can create an audience segment of users who purchase something in your channel.  For each audience segment you create, Quantcast will track membership of the segment over time, and generate an audience report that includes their demographics.  If you have implemented the same audience segments on your website(s), you will see a combined view of your web and channel audiences for each audience segment. Learn more about how to use audience segments, including how to create segment hierarchies using the dot notation, here: [https://www.quantcast.com/help/showcase-your-audience-segments/](https://www.quantcast.com/help/showcase-your-audience-segments/). 
+Use labels to create Audience Segments, or groups of users that share a common property or attribute.  For instance, you can create an audience segment of users who purchase something in your channel.  For each audience segment you create, Quantcast will track membership of the segment over time, and generate an audience report that includes their demographics.  If you have implemented the same audience segments on your website(s), you will see a combined view of your web and channel audiences for each audience segment. Learn more about how to use audience segments, including how to create segment hierarchies using the dot notation, here: [https://www.quantcast.com/help/using-audience-segments](https://www.quantcast.com/help/using-audience-segments). 
 
 Labels can be set on most methods of the SDK and can be either a single string or an array of Strings.   Labels are always the last parameter of a function and always optional.  For example when you start the Channel you can pass any know labels in the start function
 
