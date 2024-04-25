@@ -1,4 +1,4 @@
-Quantcast Measure SDK for Roku
+[DEPRECATED] Quantcast Measure SDK for Roku - Quantcast no longer supports mobile in app measurment at this time.
 =================
 This implementation guide provides steps for integrating the Quantcast Measure for Roku SDK, so you can take advantage of valuable, actionable insights:
 
